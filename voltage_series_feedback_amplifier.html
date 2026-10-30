@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voltage-Series Feedback Amplifier | Analog Electronics</title>
+<style>
+:root{--navy:#10243a;--blue:#1769aa;--cyan:#dff3fb;--ink:#203040;--muted:#5d6b78;--paper:#f5f8fb;--line:#d9e2ea;--green:#147d55;--red:#b42318;--gold:#fff3cd}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 "Segoe UI",Arial,sans-serif}
+header{background:linear-gradient(125deg,#10243a,#1769aa);color:#fff;padding:42px max(5vw,22px) 36px}
+header .tag{display:inline-block;background:#ffffff20;border:1px solid #ffffff55;border-radius:20px;padding:4px 12px;font-size:.82rem}
+h1{font-size:clamp(2rem,4vw,3.2rem);line-height:1.15;margin:15px 0}
+header p{max-width:850px;color:#e5f2fc;margin:8px 0}
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.meta span{background:#ffffff18;border-radius:8px;padding:7px 11px;font-size:.9rem}
+nav{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:10px 4vw;display:flex;gap:8px;overflow-x:auto}
+nav a{white-space:nowrap;text-decoration:none;color:var(--navy);font-size:.88rem;padding:6px 10px;border-radius:7px}nav a:hover{background:var(--cyan)}
+main{max-width:1180px;margin:28px auto;padding:0 20px}
+section{background:#fff;border:1px solid var(--line);border-radius:14px;padding:25px;margin:20px 0;box-shadow:0 3px 12px #10243a08;scroll-margin-top:72px}
+h2{color:var(--navy);font-size:1.55rem;margin:0 0 15px;border-bottom:2px solid var(--cyan);padding-bottom:9px}
+h3{color:#174f7d;margin:22px 0 8px;font-size:1.12rem}
+p{margin:8px 0}ul,ol{padding-left:24px}li{margin:5px 0}
+.callout{border-left:4px solid var(--blue);background:#edf7fc;padding:12px 16px;border-radius:7px;margin:14px 0}
+.warn{border-left-color:#d49a19;background:var(--gold)}.good{border-left-color:var(--green);background:#eaf7f0}
+.eq{font-family:Cambria,"Times New Roman",serif;background:#f2f6fa;border:1px solid var(--line);border-radius:8px;padding:12px 16px;margin:12px 0;text-align:center;font-size:1.13rem;overflow-x:auto}
+.small{font-size:.9rem;color:var(--muted)}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem}th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}th{background:#eaf3f9;color:var(--navy)}
+.diagram{width:100%;overflow-x:auto;background:#fbfdff;border:1px solid var(--line);border-radius:10px;padding:10px}
+.diagram svg{min-width:650px;width:100%;height:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.tile{border:1px solid var(--line);border-radius:10px;padding:13px;background:#fcfdff}
+button{border:0;border-radius:8px;padding:10px 16px;background:var(--blue);color:white;font-weight:600;cursor:pointer;margin:6px 5px 6px 0}button:hover{filter:brightness(.92)}button.secondary{background:#526579}
+details{border:1px solid var(--line);border-radius:8px;padding:11px 14px;margin:9px 0;background:#fcfdff}summary{font-weight:650;cursor:pointer;color:var(--navy)}
+.question{border:1px solid var(--line);padding:15px;border-radius:10px;margin:13px 0}.question label{display:block;padding:4px 0;cursor:pointer}.feedback{margin-top:9px;padding:9px;border-radius:7px;display:none}.correct{background:#e8f6ee;color:#125b3d}.incorrect{background:#fff0ef;color:#8f211a}.unanswered{background:#fff7df;color:#775300}
+.score{font-weight:700;font-size:1.1rem;margin:12px 0}
+footer{text-align:center;color:var(--muted);padding:28px}
+@media(max-width:650px){section{padding:17px;margin:13px 0}header{padding:30px 20px}table{font-size:.85rem}th,td{padding:7px}}
+@media print{body{background:#fff;font-size:11pt}nav,button{display:none!important}main{max-width:none;margin:0;padding:0}section{box-shadow:none;break-inside:avoid;border:1px solid #bbb;margin:12px 0;padding:16px}header{background:#fff!important;color:#000;padding:18px 0}header p{color:#222}.tag,.meta span{border:1px solid #777;background:#fff;color:#000}.question{break-inside:avoid}details{break-inside:avoid}details>*{display:block}a{color:#000}}
+</style>
+</head>
+<body>
+<header>
+<span class="tag">ANALOG ELECTRONICS • OPERATIONAL AMPLIFIER / FEEDBACK</span>
+<h1>Voltage-Series Feedback Amplifier</h1>
+<p>A structured learning module covering the series–shunt (voltage-series) negative-feedback topology, its gain, impedance behaviour, circuit realisation, design calculations, GATE practice and technical interviews.</p>
+<div class="meta"><span>Academic level: B.E./B.Tech ECE</span><span>For: College • GATE • Core interviews</span><span>Simulation context: Multisim</span></div>
+</header>
+<nav>
+<a href="#intro">Introduction</a><a href="#topology">Topology</a><a href="#working">Working</a><a href="#equations">Equations</a><a href="#examples">Numericals</a><a href="#simulation">Waveforms</a><a href="#gate">GATE practice</a><a href="#interview">Interview</a><a href="#applications">Applications</a><a href="#quiz">Topic quiz</a><a href="#revision">Revision</a>
+</nav>
+<main>
+<section id="intro">
+<h2>1. Introduction and learning objectives</h2>
+<p>A <b>voltage-series feedback amplifier</b> is a negative-feedback amplifier in which a fraction of the output voltage is sampled across the output terminals and fed back in series with the input signal. It is also called a <b>series–shunt feedback amplifier</b>: series mixing occurs at the input and shunt (voltage) sampling occurs at the output.</p>
+<p>The feedback voltage opposes the applied signal. This reduces the overall gain but makes the gain more stable, increases input resistance and decreases output resistance. It is widely associated with voltage amplifiers and the non-inverting op-amp configuration.</p>
+<div class="callout good"><b>Core result:</b> For a stable negative-feedback loop, the closed-loop voltage gain is <span class="eq">A<sub>f</sub> = A / (1 + Aβ)</span> where A is the open-loop gain and β is the feedback factor.</div>
+<h3>Learning objectives</h3><ul><li>Identify series mixing and voltage sampling in the topology.</li><li>Derive closed-loop gain and explain loop gain Aβ.</li><li>Predict the effect of feedback on input/output resistance.</li><li>Analyse a non-inverting op-amp as a practical example.</li><li>Solve numerical problems and interpret frequency response and stability.</li></ul>
+<h3>Prerequisites</h3><p>Voltage gain, Ohm’s law, Kirchhoff’s laws, voltage dividers, ideal op-amp rules, complex impedance and basic Bode plots.</p>
+<h3>Important terminology</h3>
+<table><tr><th>Term</th><th>Meaning</th></tr><tr><td>Open-loop gain A</td><td>Amplifier gain before feedback is applied (dimensionless V/V).</td></tr><tr><td>Feedback factor β</td><td>Fraction of output voltage returned to the input; β = V<sub>f</sub>/V<sub>o</sub>.</td></tr><tr><td>Loop gain T</td><td>Aβ, the product of forward gain and feedback factor.</td></tr><tr><td>Closed-loop gain A<sub>f</sub></td><td>Gain after feedback is connected.</td></tr><tr><td>Negative feedback</td><td>Feedback signal is subtracted from the source signal.</td></tr><tr><td>Desensitivity</td><td>Reduction in gain sensitivity to changes in A by the factor 1 + Aβ.</td></tr></table>
+</section>
+
+<section id="topology">
+<h2>2. Circuit / topology diagram</h2>
+<p>The conceptual circuit below shows a voltage amplifier with a resistive divider sampling its output. The divider returns V<sub>f</sub> in series opposition to V<sub>s</sub>. The block A represents the amplifier stage.</p>
+<div class="diagram">
+<svg viewBox="0 0 900 340" role="img" aria-label="Voltage-series negative feedback block diagram">
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="#1769aa"/></marker></defs>
+<rect x="340" y="105" width="210" height="105" rx="12" fill="#e8f3fb" stroke="#1769aa" stroke-width="2"/>
+<text x="445" y="145" text-anchor="middle" font-size="22" fill="#10243a" font-weight="bold">Amplifier</text><text x="445" y="175" text-anchor="middle" font-size="18" fill="#10243a">A</text>
+<path d="M90 158 H245" stroke="#1769aa" stroke-width="3" fill="none" marker-end="url(#arr)"/>
+<circle cx="265" cy="158" r="19" fill="#fff" stroke="#1769aa" stroke-width="2"/><text x="265" y="165" text-anchor="middle" font-size="22" fill="#10243a">Σ</text>
+<path d="M284 158 H340" stroke="#1769aa" stroke-width="3" fill="none" marker-end="url(#arr)"/>
+<text x="85" y="139" font-size="18" fill="#10243a">V<tspan baseline-shift="sub" font-size="12">s</tspan></text><text x="265" y="196" text-anchor="middle" font-size="13" fill="#5d6b78">V<tspan baseline-shift="sub">s</tspan> − V<tspan baseline-shift="sub">f</tspan></text>
+<path d="M550 158 H760" stroke="#1769aa" stroke-width="3" fill="none" marker-end="url(#arr)"/><text x="770" y="145" font-size="18" fill="#10243a">V<tspan baseline-shift="sub" font-size="12">o</tspan></text>
+<path d="M680 158 V270 H445 V210" stroke="#147d55" stroke-width="3" fill="none"/>
+<rect x="575" y="242" width="150" height="55" rx="8" fill="#eaf7f0" stroke="#147d55" stroke-width="2"/><text x="650" y="265" text-anchor="middle" font-size="17" fill="#125b3d">Feedback</text><text x="650" y="285" text-anchor="middle" font-size="15" fill="#125b3d">network β</text>
+<path d="M575 270 H265 V177" stroke="#147d55" stroke-width="3" fill="none" marker-end="url(#arr)"/>
+<text x="300" y="255" font-size="16" fill="#147d55">V<tspan baseline-shift="sub" font-size="11">f</tspan> = βV<tspan baseline-shift="sub" font-size="11">o</tspan></text>
+<text x="445" y="70" text-anchor="middle" font-size="15" fill="#5d6b78">Series mixing at input</text>
+<text x="680" y="130" text-anchor="middle" font-size="15" fill="#5d6b78">Voltage sampled across output</text>
+</svg>
+</div>
+<p class="small">Conceptual feedback block diagram; the amplifier block may represent a transistor amplifier or an op-amp stage.</p>
+<h3>Practical op-amp example: non-inverting amplifier</h3>
+<div class="diagram">
+<svg viewBox="0 0 900 360" role="img" aria-label="Non-inverting op amp voltage-series feedback circuit">
+<defs><marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="#1769aa"/></marker></defs>
+<path d="M340 90 L340 275 L555 182 Z" fill="#f0f6fb" stroke="#1769aa" stroke-width="3"/>
+<text x="375" y="155" font-size="23" fill="#10243a">+</text><text x="375" y="225" font-size="23" fill="#10243a">−</text><text x="455" y="190" text-anchor="middle" font-size="20" fill="#10243a">OP-AMP</text>
+<path d="M80 150 H340" stroke="#1769aa" stroke-width="3" fill="none" marker-end="url(#arr2)"/><text x="80" y="133" font-size="18" fill="#10243a">V<tspan baseline-shift="sub">in</tspan></text>
+<path d="M555 182 H790" stroke="#1769aa" stroke-width="3" fill="none" marker-end="url(#arr2)"/><text x="800" y="175" font-size="18" fill="#10243a">V<tspan baseline-shift="sub">o</tspan></text>
+<path d="M690 182 V245 H635" stroke="#147d55" stroke-width="3" fill="none"/>
+<rect x="575" y="232" width="60" height="28" fill="#fff" stroke="#147d55" stroke-width="2"/><text x="605" y="252" text-anchor="middle" font-size="15" fill="#125b3d">R<tspan baseline-shift="sub">f</tspan></text>
+<path d="M575 246 H430 V210" stroke="#147d55" stroke-width="3" fill="none"/>
+<path d="M605 260 V300" stroke="#147d55" stroke-width="3"/><rect x="575" y="300" width="60" height="28" fill="#fff" stroke="#147d55" stroke-width="2"/><text x="605" y="320" text-anchor="middle" font-size="15" fill="#125b3d">R<tspan baseline-shift="sub">1</tspan></text><path d="M605 328 V340 M585 340 H625 M590 346 H620" stroke="#10243a" stroke-width="2"/>
+<text x="365" y="105" font-size="14" fill="#5d6b78">Non-inverting input</text><text x="440" y="232" font-size="14" fill="#5d6b78">Inverting input</text>
+</svg>
+</div>
+<p class="small">The diagram is schematic, not a Multisim capture. R<sub>f</sub> connects output to the inverting input; R<sub>1</sub> connects the inverting input to ground. A practical circuit also requires suitable positive and negative supply rails (or a suitable single-supply bias arrangement), which are omitted here for visual clarity.</p>
+<h3>Component function</h3><table><tr><th>Element</th><th>Function</th></tr><tr><td>Amplifier A</td><td>Provides forward voltage gain.</td></tr><tr><td>Feedback network β</td><td>Samples output voltage and sets the returned fraction.</td></tr><tr><td>Summing/input stage</td><td>Forms error signal V<sub>i</sub> = V<sub>s</sub> − V<sub>f</sub>.</td></tr><tr><td>R<sub>f</sub>, R<sub>1</sub></td><td>Set β = R<sub>1</sub>/(R<sub>1</sub> + R<sub>f</sub>) in the non-inverting op-amp circuit.</td></tr></table>
+</section>
+
+<section id="working">
+<h2>3. Working principle</h2>
+<ol><li><b>Apply input:</b> The source provides V<sub>s</sub> to the input summing arrangement.</li><li><b>Amplify:</b> The amplifier produces output V<sub>o</sub> = A V<sub>i</sub>.</li><li><b>Sample voltage:</b> The output network senses the output voltage and returns V<sub>f</sub> = βV<sub>o</sub>.</li><li><b>Series subtract:</b> The feedback voltage opposes the source, so V<sub>i</sub> = V<sub>s</sub> − V<sub>f</sub>.</li><li><b>Reach equilibrium:</b> The loop settles where the amplifier output and feedback satisfy both equations, provided the loop is stable and the amplifier is not saturated.</li></ol>
+<div class="eq">V<sub>o</sub> = A(V<sub>s</sub> − βV<sub>o</sub>) &nbsp; ⇒ &nbsp; V<sub>o</sub>/V<sub>s</sub> = A/(1 + Aβ)</div>
+<h3>Why the name voltage-series?</h3><ul><li><b>Voltage sampling:</b> The feedback network is connected across the output, so it senses output voltage (shunt sampling).</li><li><b>Series mixing:</b> The feedback voltage is inserted in series opposition with the source at the input.</li></ul>
+<h3>Important operating conditions</h3><ul><li>Feedback must be negative at the frequency of interest.</li><li>The amplifier should operate in its linear region, not in saturation or current limiting.</li><li>For the simple gain formula, A and β are treated as scalar gains at the frequency considered.</li><li>For frequency-dependent circuits, A(s) and β(s) are complex functions and stability must be checked.</li></ul>
+<h3>Advantages and limitations</h3><div class="grid"><div class="tile"><b>Advantages</b><ul><li>Stable and predictable closed-loop gain.</li><li>Higher input resistance.</li><li>Lower output resistance.</li><li>Reduced nonlinear distortion and sensitivity.</li><li>Often wider usable bandwidth for a dominant-pole amplifier.</li></ul></div><div class="tile"><b>Limitations</b><ul><li>Closed-loop gain is lower than open-loop gain.</li><li>Available output swing and slew rate remain limited.</li><li>Feedback can cause instability if phase shift makes it effectively positive.</li><li>Noise, offset and bias currents are not eliminated.</li><li>Finite gain-bandwidth and component tolerances affect accuracy.</li></ul></div></div>
+<div class="callout warn"><b>Common misconception:</b> Negative feedback does not always mean the output waveform is inverted by 180°. “Negative” describes the sign of the returned signal at the summing point, not necessarily the phase relation between source and output.</div>
+</section>
+
+<section id="equations">
+<h2>4. Mathematical equations and derivation</h2>
+<h3>Closed-loop voltage gain</h3>
+<p>Let A = V<sub>o</sub>/V<sub>i</sub>, β = V<sub>f</sub>/V<sub>o</sub>, and V<sub>i</sub> = V<sub>s</sub> − V<sub>f</sub>.</p>
+<div class="eq">V<sub>o</sub> = A V<sub>i</sub> = A(V<sub>s</sub> − βV<sub>o</sub>)</div>
+<div class="eq">V<sub>o</sub>(1 + Aβ) = AV<sub>s</sub> &nbsp; ⇒ &nbsp; <b>A<sub>f</sub> = A/(1 + Aβ)</b></div>
+<p>A, β and A<sub>f</sub> are dimensionless voltage ratios (V/V). Aβ is the dimensionless loop gain.</p>
+<h3>Large-loop-gain approximation</h3>
+<p>If |Aβ| ≫ 1 and the loop is stable:</p><div class="eq">A<sub>f</sub> ≈ 1/β</div>
+<p>The gain is then mainly set by the feedback network, rather than the exact open-loop gain.</p>
+<h3>Gain desensitivity</h3>
+<div class="eq">D = 1 + Aβ</div>
+<p>For small changes in A, the fractional closed-loop gain change is approximately the open-loop fractional change divided by 1 + Aβ. More exactly, the sensitivity is:</p>
+<div class="eq">S<sub>A</sub><sup>A<sub>f</sub></sup> = (∂A<sub>f</sub>/∂A)(A/A<sub>f</sub>) = 1/(1 + Aβ)</div>
+<h3>Input and output resistance</h3>
+<p>For voltage-series feedback, series mixing raises input resistance and voltage (shunt) sampling lowers output resistance:</p>
+<div class="eq">R<sub>if</sub> = R<sub>i</sub>(1 + Aβ) &nbsp;&nbsp; ; &nbsp;&nbsp; R<sub>of</sub> = R<sub>o</sub>/(1 + Aβ)</div>
+<p>These are idealised low-frequency results for a unilateral amplifier model with negative feedback. Actual impedances depend on frequency, loading and circuit topology.</p>
+<h3>Non-inverting op-amp feedback factor</h3>
+<p>For R<sub>f</sub> from output to the inverting node and R<sub>1</sub> from that node to ground, the divider gives:</p>
+<div class="eq">β = R<sub>1</sub>/(R<sub>1</sub> + R<sub>f</sub>)</div>
+<div class="eq">A<sub>f</sub> = 1/β = 1 + R<sub>f</sub>/R<sub>1</sub> &nbsp; (ideal op-amp approximation)</div>
+<p>The exact finite-open-loop-gain result is A<sub>f</sub> = A/[1 + Aβ]. The familiar resistor gain assumes sufficiently large open-loop gain and operation within bandwidth and output limits.</p>
+<h3>Frequency response and bandwidth</h3>
+<p>For a single-dominant-pole voltage amplifier with approximately constant β, feedback trades gain for bandwidth. Under the usual gain-bandwidth approximation:</p><div class="eq">A<sub>f</sub> × BW<sub>f</sub> ≈ A × BW ≈ GBW</div>
+<p>This approximation is not universal; it is most useful for a dominant-pole op-amp in its linear region. Real devices have finite phase margin, additional poles/zeros and slew-rate limits.</p>
+<h3>Decibel conversion</h3><div class="eq">A<sub>v,dB</sub> = 20 log<sub>10</sub>|A<sub>v</sub>|</div>
+<p>Use 20 log for voltage gain when input/output impedances are appropriately comparable or when simply expressing a voltage ratio. For power ratios use 10 log<sub>10</sub>(P<sub>o</sub>/P<sub>i</sub>).</p>
+</section>
+
+<section id="examples">
+<h2>5. Solved numerical problems</h2>
+<h3>Example 1 — Basic closed-loop gain</h3><p><b>Given:</b> A = 1000, β = 0.05. Find A<sub>f</sub>.</p><p><b>Formula:</b> A<sub>f</sub> = A/(1 + Aβ).</p><div class="eq">Aβ = 1000 × 0.05 = 50</div><div class="eq">A<sub>f</sub> = 1000/(1 + 50) = 1000/51 = <b>19.61 V/V</b></div><p><b>Interpretation:</b> Feedback reduces the gain from 1000 to about 19.61 while improving gain stability.</p>
+<h3>Example 2 — Design a non-inverting amplifier</h3><p><b>Given:</b> Desired ideal gain = 11, choose R<sub>1</sub> = 10 kΩ. Find R<sub>f</sub>.</p><p><b>Formula:</b> A<sub>f</sub> = 1 + R<sub>f</sub>/R<sub>1</sub>.</p><div class="eq">11 = 1 + R<sub>f</sub>/10 kΩ</div><div class="eq">R<sub>f</sub> = 10 × 10 kΩ = <b>100 kΩ</b></div><p><b>Interpretation:</b> Select standard 100 kΩ and 10 kΩ resistors. The theoretical gain is 11 V/V, subject to op-amp limits and resistor tolerances.</p>
+<h3>Example 3 — GATE-style: impedance change</h3><p><b>Given:</b> R<sub>i</sub> = 2 kΩ, R<sub>o</sub> = 10 kΩ and loop gain Aβ = 49. Find R<sub>if</sub> and R<sub>of</sub>.</p><div class="eq">1 + Aβ = 50</div><div class="eq">R<sub>if</sub> = 2 kΩ × 50 = <b>100 kΩ</b></div><div class="eq">R<sub>of</sub> = 10 kΩ/50 = <b>200 Ω</b></div><p><b>Interpretation:</b> Input resistance increases by 50 times, while output resistance decreases by 50 times.</p>
+<h3>Example 4 — Finite gain accuracy</h3><p><b>Given:</b> A = 2000, β = 0.1, V<sub>s</sub> = 0.2 V. Find V<sub>o</sub> and compare with the ideal high-loop-gain value.</p><div class="eq">A<sub>f</sub> = 2000/(1 + 200) = 2000/201 = 9.9502</div><div class="eq">V<sub>o</sub> = 9.9502 × 0.2 = <b>1.990 V</b></div><p>Ideal approximation: 1/β = 10, so V<sub>o,ideal</sub> = 2.000 V. The finite-gain result is slightly lower.</p>
+<div class="callout"><b>Shortcut:</b> When Aβ is very large, use A<sub>f</sub> ≈ 1/β for a quick estimate. Use A/(1 + Aβ) when exact finite-gain accuracy is required.</div>
+</section>
+
+<section id="simulation">
+<h2>6. Waveforms and Multisim simulation guidance</h2>
+<p>No Multisim screenshot was attached with this request. The plots below are illustrative theoretical waveforms, not measured simulation data.</p>
+<div class="diagram">
+<svg viewBox="0 0 900 330" role="img" aria-label="Illustrative input and output sine waves in phase">
+<line x1="65" y1="155" x2="850" y2="155" stroke="#789" stroke-width="1.5"/><line x1="65" y1="30" x2="65" y2="285" stroke="#789" stroke-width="1.5"/>
+<path d="M65 155 C105 85 145 85 185 155 S265 225 305 155 S385 85 425 155 S505 225 545 155 S625 85 665 155 S745 225 785 155 S825 85 850 125" fill="none" stroke="#1769aa" stroke-width="3"/>
+<path d="M65 155 C105 115 145 115 185 155 S265 195 305 155 S385 115 425 155 S505 195 545 155 S625 115 665 155 S745 195 785 155 S825 115 850 135" fill="none" stroke="#147d55" stroke-width="3"/>
+<text x="75" y="28" font-size="16" fill="#10243a">Illustrative voltage vs time</text><text x="700" y="65" font-size="14" fill="#1769aa">V<tspan baseline-shift="sub">o</tspan> (larger)</text><text x="700" y="88" font-size="14" fill="#147d55">V<tspan baseline-shift="sub">s</tspan> (smaller)</text><text x="860" y="160" font-size="13" fill="#5d6b78">t →</text>
+</svg>
+</div>
+<p>For a non-inverting voltage-series amplifier, the output is normally in phase with the source at frequencies well inside the closed-loop passband. Its amplitude is larger by the closed-loop gain. The returned feedback voltage is in the opposing sense at the summing node.</p>
+<h3>Suggested Multisim procedure</h3><ol><li>Build a non-inverting op-amp circuit with an appropriate op-amp model and supply rails.</li><li>Connect R<sub>f</sub> from output to the inverting input and R<sub>1</sub> from the inverting input to ground.</li><li>Apply a small sine input, for example 100 mV peak at 1 kHz, ensuring the output will not clip.</li><li>Use an oscilloscope to display input and output simultaneously.</li><li>Measure V<sub>in</sub> and V<sub>out</sub>; calculate gain = V<sub>out</sub>/V<sub>in</sub>.</li><li>Run AC analysis to inspect gain and phase versus frequency; compare the measured passband gain with 1 + R<sub>f</sub>/R<sub>1</sub>.</li></ol>
+<table><tr><th>Observation</th><th>Expected behaviour</th><th>Possible check if different</th></tr><tr><td>Passband amplitude</td><td>Approximately set by resistor ratio.</td><td>Check resistor wiring, loading and op-amp model.</td></tr><tr><td>Phase</td><td>Approximately 0° for non-inverting stage in passband.</td><td>Check probe polarity and frequency response.</td></tr><tr><td>Clipping</td><td>Not expected for small input within output swing.</td><td>Reduce input amplitude; verify supply rails.</td></tr><tr><td>High-frequency gain</td><td>Eventually falls as open-loop gain decreases.</td><td>Check GBW, load capacitance and model limitations.</td></tr></table>
+</section>
+
+<section id="gate">
+<h2>7. GATE examination preparation</h2>
+<p>These are original practice questions written for this module; they are not represented as actual GATE previous-year questions.</p>
+<div id="gateQuestions"></div><button onclick="gradeQuiz('gateQuestions','gateResult')">Check GATE answers</button><button class="secondary" onclick="resetQuiz('gateQuestions','gateResult')">Reset GATE quiz</button><div id="gateResult" class="score" aria-live="polite"></div>
+</section>
+
+<section id="interview">
+<h2>8. Core electronics company interview preparation</h2>
+<details><summary>1. What is voltage-series feedback?</summary><p>It is negative feedback in which output voltage is sampled across the load and a proportional feedback voltage is mixed in series opposition with the input. It is also called series–shunt feedback.</p></details>
+<details><summary>2. Why is it called series–shunt feedback?</summary><p>At the input, the feedback signal is combined in series with the source. At the output, the network is connected across the output terminals to sample voltage.</p></details>
+<details><summary>3. Derive the closed-loop gain.</summary><p>V<sub>i</sub> = V<sub>s</sub> − βV<sub>o</sub> and V<sub>o</sub> = AV<sub>i</sub>. Substitution gives V<sub>o</sub>(1 + Aβ) = AV<sub>s</sub>, hence A<sub>f</sub> = A/(1 + Aβ).</p></details>
+<details><summary>4. What happens to input and output resistance?</summary><p>For voltage-series feedback, input resistance increases by approximately 1 + Aβ and output resistance decreases by the same factor, under the standard feedback model.</p></details>
+<details><summary>5. What is loop gain?</summary><p>Loop gain is T = Aβ. It indicates how strongly the feedback loop acts. Large loop gain makes closed-loop gain approach 1/β, but stability still must be verified.</p></details>
+<details><summary>6. Does negative feedback always improve stability?</summary><p>It improves gain stability against parameter variation, but it does not guarantee dynamic stability. Extra phase shift can turn nominal negative feedback into positive feedback near a loop crossover frequency.</p></details>
+<details><summary>7. How do you determine the gain of a non-inverting op-amp?</summary><p>For an ideal op-amp, V<sub>−</sub> ≈ V<sub>+</sub>. The divider gives V<sub>−</sub> = V<sub>o</sub>R<sub>1</sub>/(R<sub>1</sub> + R<sub>f</sub>) = V<sub>in</sub>, so gain = 1 + R<sub>f</sub>/R<sub>1</sub>.</p></details>
+<details><summary>8. The measured gain is lower than expected. What do you check?</summary><p>Check resistor values and connections, source/load impedance, supply rails, output clipping, op-amp gain-bandwidth product, frequency, probe setup and whether the device is stable with the load.</p></details>
+<details><summary>9. What is gain desensitivity?</summary><p>It is the reduction of closed-loop gain sensitivity to open-loop gain variation. The sensitivity is 1/(1 + Aβ).</p></details>
+<details><summary>10. How would you verify the circuit in Multisim?</summary><p>Run transient analysis with a small sine input, measure input and output amplitudes and phase, then run AC analysis for magnitude and phase. Compare passband gain to the resistor-ratio prediction and inspect bandwidth and clipping.</p></details>
+<details><summary>11. What practical factors limit the ideal result?</summary><p>Finite open-loop gain, finite GBW, slew rate, output swing, input offset voltage, input bias current, noise, resistor tolerance, loading and temperature drift.</p></details>
+<details><summary>12. What is phase margin and why does it matter?</summary><p>Phase margin is the difference between −180° and the loop phase at unity loop-gain crossover for the usual negative-feedback convention. Adequate phase margin reduces ringing and oscillation risk.</p></details>
+<h3>Industry perspective</h3><p>Voltage-series feedback is fundamental to precision voltage amplifiers, sensor-conditioning stages, active filters, instrumentation front ends and buffer/driver circuits. In product design, engineers choose the feedback network while checking noise gain, bandwidth, stability with capacitive loads, output drive, supply range, accuracy over temperature and manufacturability.</p>
+</section>
+
+<section id="applications">
+<h2>9. Applications and industry relevance</h2>
+<div class="grid"><div class="tile"><b>Sensor signal conditioning</b><p>Amplifies small sensor voltages while presenting a high input resistance to avoid loading the sensor.</p></div><div class="tile"><b>Non-inverting op-amp stages</b><p>Provides a defined voltage gain while preserving input polarity.</p></div><div class="tile"><b>Active filters</b><p>Op-amp feedback networks set filter gain and participate in frequency-selective behaviour.</p></div><div class="tile"><b>Voltage buffers and drivers</b><p>Feedback helps achieve low output resistance for driving following stages.</p></div></div>
+<h3>Engineering considerations</h3><ul><li>Choose an op-amp with sufficient gain-bandwidth product and slew rate.</li><li>Verify output voltage swing and output current for the intended load.</li><li>Check stability with the real PCB layout and capacitive loads.</li><li>Use resistor tolerances and temperature coefficients appropriate to gain accuracy.</li><li>Consider input-referred noise, offset and bias-current errors for low-level signals.</li></ul>
+<h3>Career relevance</h3><p>Useful knowledge for analog design, mixed-signal design, hardware validation, electronics R&amp;D, semiconductor applications engineering, test engineering and embedded hardware roles.</p>
+</section>
+
+<section id="quiz">
+<h2>10. Interactive 10-question topic quiz</h2>
+<p>Select one answer for each question, then check your score. Unanswered questions are counted separately.</p>
+<div id="topicQuestions"></div><button onclick="gradeQuiz('topicQuestions','topicResult')">Check answers</button><button class="secondary" onclick="resetQuiz('topicQuestions','topicResult')">Reset quiz</button><div id="topicResult" class="score" aria-live="polite"></div>
+</section>
+
+<section id="revision">
+<h2>11. Quick revision materials</h2>
+<h3>Formula sheet</h3><table><tr><th>Quantity</th><th>Formula</th></tr><tr><td>Feedback voltage</td><td>V<sub>f</sub> = βV<sub>o</sub></td></tr><tr><td>Error/input voltage</td><td>V<sub>i</sub> = V<sub>s</sub> − V<sub>f</sub></td></tr><tr><td>Closed-loop gain</td><td>A<sub>f</sub> = A/(1 + Aβ)</td></tr><tr><td>Large-loop-gain approximation</td><td>A<sub>f</sub> ≈ 1/β</td></tr><tr><td>Input resistance</td><td>R<sub>if</sub> = R<sub>i</sub>(1 + Aβ)</td></tr><tr><td>Output resistance</td><td>R<sub>of</sub> = R<sub>o</sub>/(1 + Aβ)</td></tr><tr><td>Non-inverting op-amp</td><td>A<sub>f</sub> = 1 + R<sub>f</sub>/R<sub>1</sub></td></tr><tr><td>Feedback factor</td><td>β = R<sub>1</sub>/(R<sub>1</sub> + R<sub>f</sub>)</td></tr><tr><td>Voltage gain in dB</td><td>20 log<sub>10</sub>|A<sub>v</sub>|</td></tr></table>
+<h3>Comparison of four feedback topologies</h3><table><tr><th>Topology</th><th>Input mixing</th><th>Output sampling</th><th>R<sub>in</sub> effect</th><th>R<sub>out</sub> effect</th></tr><tr><td>Voltage-series</td><td>Series</td><td>Voltage / shunt</td><td>Increases</td><td>Decreases</td></tr><tr><td>Voltage-shunt</td><td>Shunt</td><td>Voltage / shunt</td><td>Decreases</td><td>Decreases</td></tr><tr><td>Current-series</td><td>Series</td><td>Current / series</td><td>Increases</td><td>Increases</td></tr><tr><td>Current-shunt</td><td>Shunt</td><td>Current / series</td><td>Decreases</td><td>Increases</td></tr></table>
+<h3>High-priority GATE and interview points</h3><ul><li>Remember the pair: series mixing → input resistance increases; voltage sampling → output resistance decreases.</li><li>For negative feedback, denominator is 1 + Aβ.</li><li>For Aβ ≫ 1, gain approaches 1/β.</li><li>Non-inverting op-amp is a standard practical voltage-series example.</li><li>Distinguish gain stability from loop stability.</li><li>Check phase margin, bandwidth, slew rate and output swing in practical designs.</li></ul>
+<h3>Troubleshooting quick checks</h3><table><tr><th>Symptom</th><th>Likely checks</th></tr><tr><td>Output stuck near a rail</td><td>Feedback polarity, supply rails, input common-mode range, pinout and wiring.</td></tr><tr><td>Unexpected gain</td><td>Resistor values, feedback divider connections, loading and finite open-loop gain.</td></tr><tr><td>Oscillation or ringing</td><td>Phase margin, capacitive load, bypass capacitors, layout and compensation.</td></tr><tr><td>Distorted output</td><td>Input amplitude, slew rate, output current and output swing.</td></tr></table>
+<div class="callout good"><b>Memory aid:</b> “Voltage-series = voltage sampled, series mixed; Rin rises, Rout falls.”</div>
+</section>
+</main>
+<footer>Analog Electronics • Voltage-Series Feedback Amplifier • Offline learning resource</footer>
+<script>
+const gateData = [
+{q:"A voltage-series feedback amplifier uses:",o:["Series mixing and voltage sampling","Shunt mixing and current sampling","Series mixing and current sampling","Shunt mixing and voltage sampling"],a:0,e:"Voltage-series means series mixing at the input and voltage (shunt) sampling at the output." ,d:"Easy"},
+{q:"The closed-loop gain for negative feedback is:",o:["A/(1−Aβ)","A/(1+Aβ)","Aβ/(1+A)","1+Aβ"],a:1,e:"From Vi = Vs − βVo and Vo = AVi, Af = A/(1+Aβ).",d:"Easy"},
+{q:"If A = 500 and β = 0.02, Af is approximately:",o:["25.0","20.0","10.0","50.0"],a:0,e:"Aβ = 10, so Af = 500/11 = 45.45. Wait—none of the listed values match; correct choice is 45.45 V/V.",d:"Moderate",fix:["25.0","45.45","10.0","50.0"],ans:1},
+{q:"For voltage-series feedback, input resistance generally:",o:["Decreases","Does not change","Increases","Becomes zero"],a:2,e:"Series mixing increases input resistance by approximately the factor 1+Aβ.",d:"Easy"},
+{q:"For voltage-series feedback, output resistance generally:",o:["Increases","Decreases","Becomes infinite","Does not change"],a:1,e:"Voltage sampling reduces output resistance by approximately 1+Aβ.",d:"Easy"},
+{q:"An ideal non-inverting op-amp has Rf = 90 kΩ and R1 = 10 kΩ. Its gain is:",o:["9","10","11","90"],a:2,e:"Af = 1 + Rf/R1 = 1 + 90/10 = 10. Correct result is 10.",d:"Moderate",fix:["9","10","11","90"],ans:1},
+{q:"If Aβ ≫ 1, the closed-loop gain approaches:",o:["A","β","1/β","Aβ"],a:2,e:"When Aβ is very large, A/(1+Aβ) ≈ A/(Aβ) = 1/β.",d:"Moderate"},
+{q:"The sensitivity of closed-loop gain to open-loop gain is:",o:["1+Aβ","1/(1+Aβ)","Aβ","β/A"],a:1,e:"Differentiating Af = A/(1+Aβ) gives sensitivity 1/(1+Aβ).",d:"Difficult"},
+{q:"A feedback amplifier may become unstable when:",o:["The feedback network is resistive","Loop phase shift makes feedback effectively positive near crossover","The closed-loop gain is less than open-loop gain","Input resistance increases"],a:1,e:"Additional phase shift can make the loop regenerative; phase margin must be checked.",d:"Difficult"},
+{q:"A = 1000, β = 0.1. The exact closed-loop gain is:",o:["10","9.90","100","0.99"],a:1,e:"Af = 1000/(1+100) = 1000/101 = 9.90099, approximately 9.90.",d:"Moderate"}
+];
+const topicData = [
+{q:"Voltage-series feedback is also called:",o:["Series-shunt feedback","Shunt-series feedback","Shunt-shunt feedback","Series-series feedback"],a:0,e:"Series mixing at the input and shunt voltage sampling at the output."},
+{q:"The feedback voltage is:",o:["βVo","AβVs","Vo/β","A + β"],a:0,e:"By definition, β = Vf/Vo, hence Vf = βVo."},
+{q:"For negative feedback, the error signal is:",o:["Vs + Vf","Vf − Vs","Vs − Vf","Vs × Vf"],a:2,e:"The returned signal opposes the source: Vi = Vs − Vf."},
+{q:"If A=100 and β=0.1, the closed-loop gain equals:",o:["100","10","9.09","1.1"],a:2,e:"Af = 100/(1+10) = 100/11 = 9.09."},
+{q:"Which parameter is increased by series mixing?",o:["Output resistance","Input resistance","Output current gain only","Phase shift always"],a:1,e:"Series mixing increases input resistance in the standard feedback model."},
+{q:"A voltage-series amplifier is commonly realised using:",o:["Inverting op-amp only","Non-inverting op-amp","Astable multivibrator","Common-base current source"],a:1,e:"The non-inverting op-amp uses voltage sampling and series-differential input mixing."},
+{q:"For Rf=40 kΩ and R1=10 kΩ, ideal non-inverting gain is:",o:["4","5","40","0.25"],a:1,e:"Af = 1 + 40/10 = 5."},
+{q:"If loop gain is 99, the desensitivity factor 1+Aβ is:",o:["99","100","1/99","0.01"],a:1,e:"1 + Aβ = 100."},
+{q:"Which is NOT guaranteed merely by applying negative feedback?",o:["Lower gain sensitivity","Improved linearity in many cases","Dynamic stability under all conditions","Better controlled gain"],a:2,e:"Negative feedback can oscillate if loop phase and gain conditions are unfavourable."},
+{q:"A 0.1 V input is applied to an ideal gain-8 non-inverting stage. Output is:",o:["0.0125 V","0.8 V","8.1 V","80 V"],a:1,e:"Vo = gain × Vin = 8 × 0.1 = 0.8 V, assuming no clipping."}
+];
+function renderQuiz(id,data){
+ const root=document.getElementById(id); root.innerHTML="";
+ data.forEach((q,i)=>{let box=document.createElement("div");box.className="question";let opts=q.fix||q.o;let answer=(q.ans!==undefined?q.ans:q.a);
+ box.innerHTML=`<b>Q${i+1}. ${q.q}</b> <span class="small">[${q.d||"Practice"}]</span><div>${opts.map((v,j)=>`<label><input type="radio" name="${id}_${i}" value="${j}"> ${String.fromCharCode(65+j)}. ${v}</label>`).join("")}</div><div class="feedback" id="${id}_fb_${i}"></div>`;
+ box.dataset.answer=answer;box.dataset.explanation=q.e;root.appendChild(box);
+ });
+}
+function gradeQuiz(id,resultId){
+ const root=document.getElementById(id), boxes=[...root.querySelectorAll(".question")];let score=0,unanswered=0;
+ boxes.forEach((b,i)=>{let selected=b.querySelector("input:checked"),fb=document.getElementById(`${id}_fb_${i}`),ans=Number(b.dataset.answer);
+ fb.style.display="block";
+ if(!selected){unanswered++;fb.className="feedback unanswered";fb.textContent="Unanswered. "+b.dataset.explanation;}
+ else if(Number(selected.value)===ans){score++;fb.className="feedback correct";fb.textContent="Correct. "+b.dataset.explanation;}
+ else{fb.className="feedback incorrect";fb.textContent=`Incorrect. Correct answer: ${String.fromCharCode(65+ans)}. `+b.dataset.explanation;}
+ });
+ let pct=Math.round(score/boxes.length*100);document.getElementById(resultId).textContent=`Score: ${score}/${boxes.length} (${pct}%). Unanswered: ${unanswered}.`;
+}
+function resetQuiz(id,resultId){renderQuiz(id,id==="gateQuestions"?gateData:topicData);document.getElementById(resultId).textContent="";}
+renderQuiz("gateQuestions",gateData);renderQuiz("topicQuestions",topicData);
+</script>
+</body>
+</html>
